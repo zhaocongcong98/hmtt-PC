@@ -17,7 +17,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang='less'>
 img {
   display: block;
   margin: 0 auto;

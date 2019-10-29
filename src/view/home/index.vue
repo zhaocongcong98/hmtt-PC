@@ -3,7 +3,7 @@
     <el-aside :width="infrom? '200px':'64px'">
       <div class="logo" :class="{smallLogin:!infrom}"></div>
       <el-menu
-        default-active="/"
+        :default-active="$route.path"
         background-color="#002033"
         text-color="#fff"
         active-text-color="#ffd04b"
@@ -46,15 +46,15 @@
       <el-header>
         <span class="el-icon-s-fold icon" @click="toggleMenu"></span>
         <span class="text">江苏传智播客科技教育有限公司</span>
-        <el-dropdown class="dropdown">
+        <el-dropdown class="dropdown" @command="handleClick">
           <span class="el-dropdown-link">
-            <img src="../../assets/avatar.jpg" />
-            <span class="username">用户名称</span>
+            <img :src="userInfo.photo" />
+            <span class="username">{{userInfo.name}}</span>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-setting">个人设置</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-unlock">退出登录</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-setting" command="setting">个人设置</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-unlock" command="loginout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -66,15 +66,39 @@
 </template>
 
 <script>
+import local from '@/utils/local'
 export default {
   data () {
     return {
-      infrom: true
+      infrom: true,
+      userInfo: {}
     }
   },
+  created () {
+    // 设置用户信息
+    const user = local.getUser() || {}
+    this.userInfo.name = user.name
+    this.userInfo.photo = user.photo
+  },
+  // created () {
+  //   const user = local.getUser() || {}
+  //   this.userInfo.name = user.name,
+  //   this.userInfo.photo = user.photo
+  // },
   methods: {
     toggleMenu () {
       this.infrom = !this.infrom
+    },
+    setting () {
+      console.log('66666')
+      this.$router.push('/setting')
+    },
+    loginout () {
+      local.delUser()
+      this.$router.push('/login')
+    },
+    handleClick (command) {
+      this[command]()
     }
   }
 }
@@ -88,7 +112,6 @@ export default {
   left: 0;
   top: 0;
   .el-header {
-    line-height: 60px;
     border-bottom: 1px solid #ddd;
     .icon {
       font-size: 30px;
@@ -97,20 +120,20 @@ export default {
     .text {
       margin-left: 10px;
       vertical-align: middle;
-      font-size: 20px;
     }
   }
   .el-dropdown {
     float: right;
+    line-height: 60px;
     img {
       width: 30px;
       height: 30px;
       vertical-align: middle;
-      margin-right: 10px;
     }
     .username {
       vertical-align: middle;
       font-weight: bold;
+      margin-right: 5px;
     }
   }
   .el-aside {
