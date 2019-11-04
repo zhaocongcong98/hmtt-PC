@@ -9,6 +9,7 @@ import NotFound from '@/view/404'
 import local from '@/utils/local'
 import article from '@/view/article'
 import Image from '@/view/image'
+import Publish from '@/view/publish'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -30,6 +31,10 @@ const router = new VueRouter({
     {
       path: '/image',
       component: Image
+    },
+    {
+      path: '/publish',
+      component: Publish
     }
     ]
   },
