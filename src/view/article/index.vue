@@ -58,7 +58,7 @@
           </template>
         </el-table-column>
         <el-table-column label="标题" prop="title"></el-table-column>
-        <el-table-column label="状态">
+        <el-table-column label="状态" prop="status">
           <template slot-scope="scope">
             <el-tag type="info" v-if="scope.row.status===0">草稿</el-tag>
             <el-tag v-if="scope.row.status===1">待审核</el-tag>
@@ -69,7 +69,7 @@
         </el-table-column>
         <el-table-column label="发布时间" prop="pubdate"></el-table-column>
         <el-table-column label="操作" width="120px">
-          <template scope-scope="scope">
+          <template slot-scope="scope">
             <el-button
               type="primary"
               icon="el-icon-edit"
@@ -103,15 +103,15 @@ export default {
     return {
       reqParams: {
         status: null,
-        channel_id: 4,
+        channel_id: null,
         begin_pubdate: null,
         end_pubdate: null,
-        page: 5,
+        page: 1,
         per_page: 10
       },
       channelOptions: [
-        { value: 1, label: 'java' },
-        { value: 2, label: '前端' }
+        // { value: 1, label: 'java' },
+        // { value: 2, label: '前端' }
       ],
       dateArr: [],
       articles: [],
@@ -128,7 +128,7 @@ export default {
     async getArticles () {
       const {
         data: { data }
-      } = await this.$http.get('articles', { params: this.reqParam })
+      } = await this.$http.get('articles', { params: this.reqParams })
       this.articles = data.results
       this.total = data.total_count
       console.log(data)
@@ -138,8 +138,9 @@ export default {
       this.getArticles()
     },
     search () {
-      if (this.reqParams.channel_id === ' ') this.reqParams.channel_id = null
+      if (this.reqParams.channel_id === '') this.reqParams.channel_id = null
       this.reqParams.page = 1
+      console.log(11111)
       this.getArticles()
     },
     changeDate (dateArr) {

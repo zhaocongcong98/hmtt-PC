@@ -2,7 +2,7 @@
   <div class="my-image">
     <!-- 按钮 -->
     <div class="btn_box" @click="open">
-      <img src="../assets/default.png" />
+      <img :src="value||btnimage" />
     </div>
     <!-- 对话框 -->
     <el-dialog title="添加素材" :visible.sync="dialogVisible" width="750px">
@@ -50,7 +50,7 @@
       </el-tabs>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确定</el-button>
+        <el-button type="primary" @click="confrimimage">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -58,8 +58,9 @@
 
 <script>
 import local from '@/utils/local'
-
+import defaultImage from '../assets/default.png'
 export default {
+  props: ['value'],
   data () {
     return {
       reqParams: {
@@ -80,6 +81,8 @@ export default {
       images: [],
       //   选中图片的地址
       selectedImageUrl: null,
+      // 默认图片地址
+      btnimage: defaultImage,
       //   上传图片地址
       uploadImageUrl: null,
       headers: {
@@ -88,6 +91,26 @@ export default {
     }
   },
   methods: {
+    // 确认图片
+    confrimimage () {
+      if (this.activeName === 'image') {
+        // 素材库
+        if (!this.selectedImageUrl) {
+          this.$message.warnimg('请选中图片')
+        }
+        // this.btnimage = this.selectedImageUrl
+        this.$emit('input', this.selectedImageUrl)
+        this.dialogVisible = false
+      } else {
+        // 上传图片
+        if (!this.uploadImageUrl) {
+          this.$message.warning('请上传图片')
+        }
+        this.$emit('input', this.uploadImageUrl)
+        // this.btnimage = this.uploadImageUrl
+        this.dialogVisible = false
+      }
+    },
     //   打开对话框
     open () {
       this.dialogVisible = true
