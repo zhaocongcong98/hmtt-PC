@@ -66,12 +66,16 @@
 </template>
 
 <script>
+import eventBus from '@/eventBus'
 import local from '@/utils/local'
 export default {
   data () {
     return {
       infrom: true,
-      userInfo: {}
+      userInfo: {
+        name: '',
+        photo: ''
+      }
     }
   },
   created () {
@@ -79,6 +83,14 @@ export default {
     const user = local.getUser() || {}
     this.userInfo.name = user.name
     this.userInfo.photo = user.photo
+    // 绑定事件修改name
+    eventBus.$on('updateName', (name) => {
+      this.userInfo.name = name
+    })
+    // 绑定事件修改photo
+    eventBus.$on('updataphoto', (photo) => {
+      this.userInfo.photo = photo
+    })
   },
   // created () {
   //   const user = local.getUser() || {}

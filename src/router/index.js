@@ -12,6 +12,7 @@ import Image from '@/view/image'
 import Publish from '@/view/publish'
 import Comment from '@/view/comment'
 import Setting from '@/view/setting'
+import Fans from '@/view/fans'
 
 Vue.use(VueRouter)
 
@@ -46,6 +47,10 @@ const router = new VueRouter({
     {
       path: '/setting',
       component: Setting
+    },
+    {
+      path: '/fans',
+      component: Fans
     }
     ]
   },
